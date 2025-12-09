@@ -1,4 +1,22 @@
 {
+  "name": "@komed3/express-framework",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An enhanced, opinionated Express.js framework for rapid server development",
+  "license": "MIT",
+  "author": {
+    "name": "komed3 (Paul Köhler)",
+    "email": "webmaster@komed3.de",
+    "url": "https://komed3.de"
+  },
+  "homepage": "https://github.com/komed3/express-framework",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/komed3/express-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/komed3/express-framework/issues"
+  },
   "dependencies": {
     "express": "^5.2.1"
   },
