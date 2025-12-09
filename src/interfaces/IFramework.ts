@@ -1,1 +1,3 @@
-export interface IFramework {}
+export interface IFramework {
+    init () : Promise< void >;
+}
