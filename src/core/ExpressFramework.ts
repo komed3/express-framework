@@ -14,12 +14,13 @@ export class ExpressFramework implements interfaces.IFramework {
     private started = false;
 
     constructor ( configPath?: string, env?: string ) {
+        this.configLoader = new ConfigLoader( configPath, env );
         this.app = express();
-        this.configLoader = new ConfigLoader( configPath, env )
     }
 
     public async init () : Promise< void > {
-        this.logger = new Logger( {} );
+        this.config = await this.configLoader.load();
+        this.logger = new Logger( this.config.logging );
     }
 
     public getApp () : Express {

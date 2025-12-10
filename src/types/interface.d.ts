@@ -1,3 +1,4 @@
+import { AppConfig } from '@/types/config';
 import { Express } from 'express';
 
 export interface IFramework {
@@ -7,7 +8,9 @@ export interface IFramework {
     isStarted () : boolean;
 }
 
-export interface IConfigLoader {}
+export interface IConfigLoader {
+    load () : Promise< AppConfig >;
+}
 
 export interface ILogger {
     error ( message: string, meta?: any ) : void;
