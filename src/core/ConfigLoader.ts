@@ -16,12 +16,12 @@ export class ConfigLoader implements IConfigLoader {
         this.env = env ?? process.env.NODE_ENV ?? 'production';
     }
 
-    private getFullConfigPath ( path?: string ) : string {
+    private getFullPath ( path?: string ) : string {
         return join( cwd(), 'config', path ?? this.configPath );
     }
 
-    private async loadConfigFile ( path: string ) : Promise< Partial< AppConfig > > {
-        path = this.getFullConfigPath( path );
+    private async loadConfigFile ( path?: string ) : Promise< Partial< AppConfig > > {
+        path = this.getFullPath( path ?? this.configPath );
         if ( ! existsSync( path ) ) return {};
 
         const ext = extname( path ).toLowerCase();
@@ -34,9 +34,18 @@ export class ConfigLoader implements IConfigLoader {
         }
     }
 
+    private async loadEnvConfigFile ( env?: string ) : Promise< Partial< AppConfig > > {
+        env = env ?? this.env;
+        const possible = [ `${env}.json`, `${env}.yaml`, `${env}.yml` ];
+        for ( const path of possible ) if ( existsSync( this.getFullPath( path ) ) ) {
+            return this.loadConfigFile( path );
+        }
+        return {};
+    }
+
     public async load () : Promise< AppConfig > {
-        const baseConfig = await this.loadConfigFile( this.configPath );
-        const envConfig = await this.loadConfigFile( `${this.env}.yml` );
+        const baseConfig = await this.loadConfigFile();
+        const envConfig = await this.loadEnvConfigFile();
         return {} as AppConfig;
     }
 
