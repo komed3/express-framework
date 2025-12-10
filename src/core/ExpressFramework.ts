@@ -1,16 +1,21 @@
+import { AppConfig } from '@/types/config';
 import * as interfaces from '@/types/interface';
 import { Logger } from '@/core/Logger';
 import express, { Express } from 'express';
+import { ConfigLoader } from './ConfigLoader';
 
 export class ExpressFramework implements interfaces.IFramework {
 
     private app: Express;
+    private configLoader: interfaces.IConfigLoader;
+    private config!: AppConfig;
     private logger!: interfaces.ILogger;
     private initialized = false;
     private started = false;
 
     constructor ( configPath?: string, env?: string ) {
         this.app = express();
+        this.configLoader = new ConfigLoader( configPath, env )
     }
 
     public async init () : Promise< void > {

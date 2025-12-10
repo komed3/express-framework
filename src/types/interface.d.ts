@@ -7,6 +7,8 @@ export interface IFramework {
     isStarted () : boolean;
 }
 
+export interface IConfigLoader {}
+
 export interface ILogger {
     error ( message: string, meta?: any ) : void;
     exit ( message: string, meta?: any ) : void;

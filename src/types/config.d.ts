@@ -1,4 +1,4 @@
-export type LoggingConfig = {
+export interface LoggingConfig {
     level: 'error' | 'warn' | 'info' | 'debug';
     format: 'json' | 'simple' | 'full';
     file?: {
@@ -8,4 +8,8 @@ export type LoggingConfig = {
     console?: {
         enabled: boolean;
     };
-};
+}
+
+export interface AppConfig {
+    logging: LoggingConfig;
+}
