@@ -12,11 +12,16 @@ export class ConfigLoader implements IConfigLoader {
     private readonly env: string;
 
     constructor ( configPath?: string, env?: string ) {
-        this.configPath = join( cwd(), configPath ?? 'config/default.yml' );
+        this.configPath = configPath ?? 'default.yml';
         this.env = env ?? process.env.NODE_ENV ?? 'production';
     }
 
+    private getFullConfigPath ( path?: string ) : string {
+        return join( cwd(), 'config', path ?? this.configPath );
+    }
+
     private async loadConfigFile ( path: string ) : Promise< Partial< AppConfig > > {
+        path = this.getFullConfigPath( path );
         if ( ! existsSync( path ) ) return {};
 
         const ext = extname( path ).toLowerCase();
@@ -30,7 +35,8 @@ export class ConfigLoader implements IConfigLoader {
     }
 
     public async load () : Promise< AppConfig > {
-        const config = await this.loadConfigFile( this.configPath );
+        const baseConfig = await this.loadConfigFile( this.configPath );
+        const envConfig = await this.loadConfigFile( `${this.env}.yml` );
         return {} as AppConfig;
     }
 
