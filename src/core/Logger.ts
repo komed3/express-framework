@@ -39,7 +39,9 @@ export class Logger implements ILogger {
 
     private fileLog ( entry: any ) : void {}
 
-    private consoleLog ( level: string, entry: any ) : void {}
+    private consoleLog ( level: LoggingConfig[ 'level' ], entry: any ) : void {
+        ( console[ level ] ?? console.log )( entry );
+    }
 
     private log ( level: LoggingConfig[ 'level' ], message: string, meta?: any ) : void {
         if ( ! this.shouldLog( level ) ) return;

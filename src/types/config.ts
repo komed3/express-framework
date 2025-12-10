@@ -7,6 +7,5 @@ export type LoggingConfig = {
     };
     console?: {
         enabled: boolean;
-        colorize: boolean;
     };
 };
