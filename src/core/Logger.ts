@@ -1,6 +1,9 @@
 import { LoggingConfig } from '../types/config';
 import { ILogger } from '../types/interface';
-import { exit } from 'node:process';
+import { appendFileSync, mkdirSync } from 'node:fs';
+import { EOL } from 'node:os';
+import { join } from 'node:path';
+import { cwd, exit } from 'node:process';
 
 export class Logger implements ILogger {
 
@@ -37,7 +40,15 @@ export class Logger implements ILogger {
         }
     }
 
-    private fileLog ( entry: any ) : void {}
+    private fileLog ( entry: any ) : void {
+        const string = typeof entry === 'string' ? entry : JSON.stringify( entry );
+        const date = new Date().toISOString().split( '-' ).slice( 0, 2 ).join( '-' );
+        const name = ( this.config.file?.pattern ?? 'logs/{DATE}.log' ).replace( '{DATE}', date );
+        const path = join( cwd(), name );
+        const logDir = path.split( '/' ).slice( 0, -1 ).join( '/' );
+        mkdirSync( logDir, { recursive: true } );
+        appendFileSync( path, string + EOL, 'utf8' );
+    }
 
     private consoleLog ( level: LoggingConfig[ 'level' ], entry: any ) : void {
         ( console[ level ] ?? console.log )( entry );
