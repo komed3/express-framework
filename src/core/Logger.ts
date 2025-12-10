@@ -1,5 +1,5 @@
-import { LoggingConfig } from '../types/config';
-import { ILogger } from '../types/interface';
+import { LoggingConfig } from '@/types/config';
+import { ILogger } from '@/types/interface';
 import { appendFileSync, mkdirSync } from 'node:fs';
 import { EOL } from 'node:os';
 import { join } from 'node:path';

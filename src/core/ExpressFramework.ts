@@ -1,4 +1,4 @@
-import * as interfaces from '../types/interface';
+import * as interfaces from '@/types/interface';
 import { Logger } from './Logger';
 import express, { Express } from 'express';
 
