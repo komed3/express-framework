@@ -1,5 +1,5 @@
 import * as interfaces from '@/types/interface';
-import { Logger } from './Logger';
+import { Logger } from '@/core/Logger';
 import express, { Express } from 'express';
 
 export class ExpressFramework implements interfaces.IFramework {
