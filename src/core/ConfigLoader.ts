@@ -9,6 +9,15 @@ import { load } from 'js-yaml';
 
 export class ConfigLoader implements IConfigLoader {
 
+    private static readonly DEFAULT: AppConfig = {
+        logging: {
+            level: 'info',
+            format: 'json',
+            file: { enabled: true, pattern: 'logs/{DATE}.log' },
+            console: { enabled: true }
+        }
+    };
+
     private readonly configPath: string;
     private readonly env: string;
     private config!: AppConfig;
@@ -52,7 +61,15 @@ export class ConfigLoader implements IConfigLoader {
     public async load () : Promise< AppConfig > {
         const baseConfig = await this.loadConfigFile();
         const envConfig = await this.loadEnvConfigFile();
-        this.config = this.merge( baseConfig, envConfig );
+        this.config = this.merge( ConfigLoader.DEFAULT, this.merge( baseConfig, envConfig ) );
+        return this.config;
+    }
+
+    public getEnv () : string {
+        return this.env;
+    }
+
+    public getConfig () : AppConfig {
         return this.config;
     }
 

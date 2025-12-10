@@ -10,6 +10,8 @@ export interface IFramework {
 
 export interface IConfigLoader {
     load () : Promise< AppConfig >;
+    getEnv () : string;
+    getConfig () : AppConfig;
 }
 
 export interface ILogger {
