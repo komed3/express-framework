@@ -1,4 +1,4 @@
-import { IFramework } from '../interfaces/IFramework';
+import { IFramework } from '../types/framework';
 import express, { Express } from 'express';
 
 export class ExpressFramework implements IFramework {
