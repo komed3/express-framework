@@ -19,7 +19,23 @@ export class Logger implements ILogger {
         return msgLevel <= logLevel;
     }
 
-    private formatLogEntry ( level: string, message: string, meta?: any ) : any {}
+    private formatLogEntry ( level: string, message: string, meta?: any ) : any {
+        const timestamp = new Date().toISOString();
+        const levelStr = level.toUpperCase();
+        const entry: any = { timestamp, level: levelStr, message };
+
+        if ( meta instanceof Error ) entry.error = { name: meta.name, message: meta.message, stack: meta.stack };
+        else if ( meta ) entry.meta = meta;
+
+        switch ( this.config.format ) {
+            case 'json': return entry;
+            case 'simple': return `${timestamp} [${ levelStr }] ${message}`;
+            case 'full':
+                const metaStr = meta ? '\nMeta: ' + JSON.stringify( meta, null, 2 ) : '';
+                return `${timestamp} [${ levelStr }] ${message}${metaStr}`;
+            default: return entry;
+        }
+    }
 
     private fileLog ( entry: any ) : void {}
 
