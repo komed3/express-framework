@@ -1,15 +1,17 @@
 import { AppConfig } from '@/types/config';
 import { IConfigLoader } from '@/types/interface';
-import { load } from 'js-yaml';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { extname, join } from 'node:path';
 import { cwd } from 'node:process';
+import deepmerge from 'deepmerge';
+import { load } from 'js-yaml';
 
 export class ConfigLoader implements IConfigLoader {
 
     private readonly configPath: string;
     private readonly env: string;
+    private config!: AppConfig;
 
     constructor ( configPath?: string, env?: string ) {
         this.configPath = configPath ?? 'default.yml';
@@ -43,10 +45,15 @@ export class ConfigLoader implements IConfigLoader {
         return {};
     }
 
+    private merge ( base: Partial< AppConfig >, override: Partial< AppConfig > ) : AppConfig {
+        return deepmerge< AppConfig >( base, override, { arrayMerge: ( t, s ) => s || t } );
+    }
+
     public async load () : Promise< AppConfig > {
         const baseConfig = await this.loadConfigFile();
         const envConfig = await this.loadEnvConfigFile();
-        return {} as AppConfig;
+        this.config = this.merge( baseConfig, envConfig );
+        return this.config;
     }
 
 }
