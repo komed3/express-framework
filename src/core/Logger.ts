@@ -5,12 +5,32 @@ import { exit } from 'node:process';
 export class Logger implements ILogger {
 
     private readonly config: LoggingConfig;
+    private static readonly LEVEL: LoggingConfig[ 'level' ][] = [
+        'error', 'warn', 'info', 'debug'
+    ];
 
     constructor ( config: LoggingConfig ) {
         this.config = config;
     }
 
-    private log ( level: LoggingConfig[ 'level' ], message: string, meta?: any ) : void {}
+    private shouldLog ( level: LoggingConfig[ 'level' ] ) : boolean {
+        const logLevel = Logger.LEVEL.indexOf( this.config.level );
+        const msgLevel = Logger.LEVEL.indexOf( level );
+        return msgLevel <= logLevel;
+    }
+
+    private formatLogEntry ( level: string, message: string, meta?: any ) : any {}
+
+    private fileLog ( entry: any ) : void {}
+
+    private consoleLog ( level: string, entry: any ) : void {}
+
+    private log ( level: LoggingConfig[ 'level' ], message: string, meta?: any ) : void {
+        if ( ! this.shouldLog( level ) ) return;
+        const entry = this.formatLogEntry( level, message, meta );
+        if ( this.config.file?.enabled ) this.fileLog( entry );
+        if ( this.config.console?.enabled ) this.consoleLog( level, entry );
+    }
 
     error ( message: string, meta?: any ) : void {
         this.log( 'error', message, meta );
